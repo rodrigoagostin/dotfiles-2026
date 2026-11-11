@@ -23,14 +23,42 @@ Existing files are backed up with a timestamp before being replaced. Open
 GitHub features.
 
 Requirements: Neovim 0.12+, tmux 3.3+, macOS (clipboard uses `pbcopy`).
+For Rust, install the toolchain with [rustup](https://rustup.rs); Swift
+support uses Xcode's command line tools.
 
 ## Neovim
 
-Built on [LazyVim](https://www.lazyvim.org) with these extras:
-`lang.typescript`, `lang.json`, `lang.markdown`, `dap.core`,
-`formatting.prettier`, `linting.eslint`, `ai.claudecode`.
+Built on [LazyVim](https://www.lazyvim.org). Extras live in `nvim/lazyvim.json`
+(manage them with `:LazyExtras`):
+
+- Languages: `lang.typescript`, `lang.tailwind`, `lang.prisma`, `lang.rust`,
+  `lang.toml`, `lang.go`, `lang.python`, `lang.dart`, `lang.kotlin`,
+  `lang.sql`, `lang.terraform`, `lang.docker`, `lang.yaml`, `lang.json`,
+  `lang.markdown`, `lang.git`
+- Tooling: `dap.core`, `test.core` (neotest), `formatting.prettier`,
+  `linting.eslint`, `ai.claudecode`
+
+`langs.lua` adds what the extras don't cover: Swift (`sourcekit-lsp` and
+`swift-format` from Xcode, debugging via `lldb-dap`), Flutter/Dart debugging,
+Postgres dialect for `sqlfluff`, `bashls` and `shfmt` for shell scripts, and
+extra Treesitter parsers.
 
 Everything below is custom and lives in `nvim/lua/plugins`.
+
+### Rust (`config/keymaps.lua`)
+
+| Key          | Action                                                              |
+| ------------ | ------------------------------------------------------------------- |
+| `<leader>rr` | Save and `cargo run` in a bottom terminal                           |
+| `<leader>rp` | Pick a runnable (main, tests, examples) via rustaceanvim            |
+| `<leader>rl` | Run the last runnable again                                         |
+| `<leader>rt` | Run `scripts/ferris.sh` (all exercise tests with Ferris' status)    |
+
+`<leader>rr` runs from the nearest `Cargo.toml` above the current file, not
+from where nvim was opened, and a file in `src/bin/` runs as its own binary
+(`src/bin/02_variables.rs` becomes `cargo run --bin 02_variables`).
+Tests also run inside the editor through neotest (`<leader>t…`), and
+`codelldb` is used for debugging.
 
 ### Debugging (`debug.lua`)
 
